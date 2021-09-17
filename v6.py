@@ -1,9 +1,9 @@
 import asyncio
-from pandas.io import json
 import requests
 import time
 import pandas as pd
 from concurrent.futures import ThreadPoolExecutor
+
 URL = "https://tsa-usda-match-app.azurewebsites.net/match"
 
 
@@ -21,7 +21,9 @@ def fetch(session, product):
     input_json = {"product_name": product["product_name"],"commodity": product["SUBCOMMODITY NAME"]}
     with session.post(URL, json=input_json) as response:
         if response.status_code == 200:
-            return response.json()
+            res = response.json()
+            print(res)
+            return res
         else:
             print(input_json)
         return None
@@ -43,8 +45,8 @@ async def get_data_asynchronous(products):
             ]
             
             # Initializes the tasks to run and awaits their results
-            for response in await asyncio.gather(*tasks):
-                print(response)
+            # for response in await asyncio.gather(*tasks):
+            #     print(response)
 
 
 
