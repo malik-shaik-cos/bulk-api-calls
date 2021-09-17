@@ -1,0 +1,6 @@
+aiohttp
+pandas
+asyncio
+ujson
+requests
+socket
