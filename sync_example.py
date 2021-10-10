@@ -5,9 +5,8 @@ import time
 import aiohttp
 import pandas as pd
 
-URL = "https://tsa-usda-match-app.azurewebsites.net/match"
-
-
+# URL = "https://tsa-usda-match-app.azurewebsites.net/match"
+URL = "https://as-usda-ml-dev.azurewebsites.net/match"
 
 
 def concat_sub_commodity(row):
@@ -21,14 +20,20 @@ def concat_sub_commodity(row):
     return desc
 
 
-
 def get_matches(products):
     matches = []
     for product in products:
         try:
-            res = requests.post(URL, json={"product_name": product["product_name"],"commodity": product["SUBCOMMODITY NAME"]})
+            res = requests.post(
+                URL,
+                json={
+                    "product_name": product["product_name"],
+                    "commodity": product["SUBCOMMODITY NAME"],
+                },
+            )
             if res.status_code == 200:
-                print("SUCCESS")
+                # print("SUCCESS")
+                print(res.json())
                 matches.append(res.json())
         except Exception as e:
             print("Exception: ")
@@ -36,7 +41,7 @@ def get_matches(products):
 
 
 print("Loading json data into dataframe...")
-df = pd.read_json("bananas.json")
+df = pd.read_json("input-data/bananas.json")
 print(df.head())
 df["product_name"] = df.apply(concat_sub_commodity, axis=1)
 
